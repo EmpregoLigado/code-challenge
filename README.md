@@ -14,7 +14,7 @@ Temos um subset de dados com algumas vagas de emprego separadas por categoria (a
 
 ```
 partnerId|title|categoryId|ExpiresAt
-1123|Vendedor|3|21/1/2017
+1123|Vendedor|3|21/1/2018
 ```
 
 Baseando-se nesses dados, queremos que você crie 2 aplicações:
