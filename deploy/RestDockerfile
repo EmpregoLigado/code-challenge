@@ -1,0 +1,10 @@
+FROM golang:1.10.0 as builder
+
+COPY . /go/src/github.com/EmpregoLigado/code-challenge/
+WORKDIR /go/src/github.com/EmpregoLigado/code-challenge/cmd/restserver
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o restserver .
+
+FROM scratch 
+WORKDIR /root/
+COPY --from=builder /go/src/github.com/EmpregoLigado/code-challenge/cmd/restserver/restserver .
+CMD ["/root/restserver"]

@@ -1,0 +1,17 @@
+syntax = 'proto3';
+
+package levee.job;
+option go_package = "proto";
+
+service Job {
+    rpc Create(Payload) returns (Payload) {}
+    rpc List(Payload) returns (Payload) {}
+    rpc Activate(Payload) returns (Payload) {}
+    rpc Percentage(Payload) returns (Payload) {}
+}
+
+message Payload {
+    string Encoded = 1;
+}
+
+message Empty{}
