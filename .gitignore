@@ -1,3 +1,4 @@
 .DS_Store
 cmd/dataserver/dataserver
 cmd/restserver/restserver
+vendor
