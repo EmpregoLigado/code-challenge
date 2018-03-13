@@ -1,0 +1,46 @@
+version: '3.1'
+
+services:
+  db:
+    image: mariadb:10.3.5
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql/data    
+      - "./deploy/mysql-init:/docker-entrypoint-initdb.d"
+    environment:
+      MYSQL_ROOT_PASSWORD: codechallenge
+    ports:
+      - "3306:3306"      
+  data:
+    build: 
+      context: .
+      dockerfile: deploy/DataDockerfile
+    image: levee/dataserver:lastest
+    restart: always
+    depends_on: 
+      - db
+    environment:
+      PORT: 8079
+      KEY: "01020304050607080910111213141516"
+      DB: "mysql://root:codechallenge@tcp(db:3306)/jobdb"
+    links:
+      - db
+  rest:
+    build:
+      context: .
+      dockerfile: deploy/RestDockerfile
+    image: levee/restserver:lastest
+    restart: always
+    depends_on: 
+      - data    
+    environment:
+      DATA_HOST: "http://data:8079"
+      PORT: 8080
+      KEY: "01020304050607080910111213141516"
+      SECRET: "aeae42cd8f444313a4f300088713e71c"
+    links:
+      - data
+    ports:
+      - "8080:8080"
+volumes:
+  db-data:

@@ -1,0 +1,6 @@
+cmd/restserver/restserver
+cmd/dataserver/dataserver
+docker-compose.yml
+deploy/RestDockerfile
+deploy/DataDockerfile
+.git

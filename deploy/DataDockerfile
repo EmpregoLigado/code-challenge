@@ -1,0 +1,12 @@
+FROM golang:1.10.0 as builder
+
+COPY . /go/src/github.com/EmpregoLigado/code-challenge/
+WORKDIR /go/src/github.com/EmpregoLigado/code-challenge/cmd/dataserver
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o dataserver .
+
+FROM scratch 
+WORKDIR /root/
+COPY --from=builder /go/src/github.com/EmpregoLigado/code-challenge/cmd/dataserver/dataserver .
+COPY --from=builder /go/src/github.com/EmpregoLigado/code-challenge/jobs.txt .
+
+CMD ["/root/dataserver"]

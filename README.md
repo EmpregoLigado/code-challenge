@@ -1,45 +1,21 @@
 # Backend Engineer Code Challenge - Levee
 
-Através desse desafio, queremos conhecer suas habilidades de desenvolvimento e principalmente como você resolve problemas.
+Implementação do desafio [Backend Engineer Code Challenge - Levee](https://github.com/EmpregoLigado/code-challenge)
 
+## TL;DR;
 
-## Sem tempo para realizar o desafio?
-
-Você pode enviar o link de um pull request com uma contribuição sua para qualquer projeto Open Source ou algum projeto próprio que você acredita que demonstre o seu nível técnico e a qualidade do seu código.
-Lembre-se que quanto mais código seu pudermos visualizar, melhor será para te avaliarmos. :)
-
-## Sobre o desafio
-
-Temos um subset de dados com algumas vagas de emprego separadas por categoria (arquivo "jobs.txt"). Veja a estrutura abaixo:
+Executar
 
 ```
-partnerId|title|categoryId|ExpiresAt
-1123|Vendedor|3|21/1/2018
+docker-compose build
+docker-compose up -d
 ```
 
-Baseando-se nesses dados, queremos que você crie 2 aplicações:
+Acessar o serviço REST na porta 8080
 
+# Serviço REST
 
-1. A primeira aplicação deverá ser uma API REST para:
-  - criar, ativar e listar as vagas;
-  - listar a porcentagem e número de vagas ativas por categoria.
-
-2. A segunda aplicação deverá ser responsável por ler o arquivo "jobs.txt", carregar as informações referente às vagas, e servir a aplicação 1.
-
-Ao carregar esses dados essa aplicação deve ser responsável por criptografá-los e armazená-los.
-
-As informações deverão trafegar entre as aplicações criptografadas, consequentemente com a aplicação 1 tendo a habilidade de descriptografá-las. Fica a seu critério escolher a maneira que as aplicações irão se comunicar.
-
-Certifique-se de:
-- Que a aplicação seja `idempotente`, para isso você pode considerar que o atributo partnerID de cada vaga é sempre único durante a importação;
-- Importar somente vagas onde a data em que irá expirar for maior do que a data da importação;
-- Que todas as vagas recém criadas estejam com o status 'draft'.
-
-
-### Endpoints
-
-Os endpoints disponíveis na aplicação estão listados abaixo. Os classificados como `Protected` devem exigir autenticação, porém o método utilizado fica a seu critério.
-
+Endpoints
 
 | Name       | Method    | URL                  | Protected |
 | ---        | ---       | ---                  | :--:      |
@@ -48,37 +24,156 @@ Os endpoints disponíveis na aplicação estão listados abaixo. Os classificado
 | Activate   | POST      | /jobs/{:id}/activate | ✓         |
 | Percentage | GET       | /category/{:id}      | ✘         |
 
+Para acessar os endpoints protegidos é necessário informar um token JWT no header Authorization.
+Para gerar este token é necessário utilizar a mesma chave de segredo informada
+durante a inicialização do serviço REST.
+Caso esteja utilizando as configurações padrão, esta chave será:
+
+```
+aeae42cd8f444313a4f300088713e71c
+```
+
+O token precisa obrigatóriamente possuir os seguintes dados:
+
+Header
+
+```
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+Payload
+
+```
+{
+  "exp": 33119884799
+}
+```
+
+Note que campo ```exp``` é o valor em segundos desde 01/01/1970 UTC, ou o Unix Time como é conhecido. 
+
+Utilize o seguinte header para requisições ao serviço rodando com as configurações padrão:
+
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjMzMTE5ODg0Nzk5fQ.nHpr7MgyjAIA_I1de-6baw3WU_CvCEuGO54p9Rruqx4
+```
+
+Este token é válido até 3017, o que torna uma péssima idéia rodar em produção com os valores default ;)
 
 
-## Pré-requisitos
+Novos tokens podem ser facilmente gerados na ferramenta [jwt.io](http://jwt.io).
 
-O seu teste deve ter um README com os passos necessários para:
-- Rodar o projeto;
-- Instalar as dependências;
-- Rodar os testes automatizados.
 
-### Tecnologia
+Os endpoints retornam formato as respostas em formato json.
 
-Ruby ou Go.
+Adicionalmente foram definidas as seguintes variáveis no endpoint List para paginação:
 
-### Bônus hints:
+- limit: default 100
+- page: default 0
+- status: active, draft, any default any
 
-- Gostamos de testes;
-- Gostamos de Docker;
-- Gostamos de CI;
-- Message queues são legais;
-- Commits estruturados são bem legais;
-- Documentação é vida.
 
-## O que está sendo avaliado
 
-Sua capacidade de compreender um problema, desenhar uma solução e aplicá-la.
-Queremos ver como você resolve o problema proposto e suas habilidades com as tecnologias propostas.
+# Dependências
 
-## Submissão
+Todas as dependências de bibliotecas estão contidas no repositório, gerenciadas pelo go dep. 
+A instalação desta ferramenta apenas é necessária caso seja adicionada alguma
+nova dependência.
 
-Para nos enviar seu código, você pode:
+```
+go get -u github.com/golang/dep/cmd/dep
+```
 
-- Fazer um fork desse repositório e nos mandar um pull request.
-- Nos dar acesso ao seu repositório no github, bitbucket ou gitlab. Adicione o usuário bonigauglitz.
-- Se precisar falar com a gente: engenheria@levee.com.br.
+Como o uso de diretórios de vendoring foi adicionado ao compilador na versão 1.9 do Go, essa é a versão mínima que consegue compilar este código na forma que está organizado.
+
+# Decisões de arquitetura
+
+Para a comunicação entre os serviços, escolhi o utilizar [Twirp](https://blog.twitch.tv/twirp-a-sweet-new-rpc-framework-for-go-5f2febbf35f).
+
+Essa biblioteca é uma criação da equipe do Twich para implementar
+RPC sem a necessidade de SSL. Como o Twirp utiliza como base o Protocol Buffer, é relativamente fácil migrar para gRPC caso necessário.
+
+Os dados são transitados entre os serviços utilizando criptografia de chave compartilhada. O algoritmo é do tipo AES/CBC/PKCS e as chaves devem ser de 16, 24 ou 32 bytes para selecionar respectivamente AES-128, AES-192 ou AES-256.
+O vetor de inicialização da versão implementada é sempre zero.
+
+O armazenamento no banco de dados utiliza o mesmo mecânismo de criptografia. Este foi aplicado apenas ao campo title como exemplo simplificado de ofuscação dos dados.
+
+
+# Deploy
+No repositório encontra-se um arquivo docker-compose.yml que visa facilitar a geração de imagens Docker e a execução de um ambiente funcional local.
+
+Este compose tem as seguintes funções: 
+
+1. Compilar o código e gerar as imagens.
+1. Inicializar um servidor de banco de dados e construir as tabelas necessárias.
+2. Configurar e inicializar  o serviço de dados.
+3. Configurar e inicializar o serviço REST.
+
+Os detalhes da compilação podem ser encontrados nas receitas deploy/DataDockerfile e deploy/RestDockerfile.
+
+As imagens finais são nomeadas levee/dataserver e levee/restserver.
+
+# Testes
+Foi utilizada a biblioteca padrão da Golang para criar os testes.
+Assim para executar os mesmos basta o seguinte comando no diretório raiz do código:
+
+```
+go test ./...
+```
+
+Estes testes são efetuados apenas em memória. Caso a variavél DB esteja configurada o banco de dados fornecido na mesma será executado para testes.
+
+No arquivo deploy/mysql-init/mysql.sql encontram-se os dados necessários para inicializar a tabela do mysql caso deseje efetuar isto manualmente.
+
+Pode-se inicializar apenas o banco de dados via docker-compose caso não exista um mysql rodando na host.  
+
+```
+docker-compose run --service-ports db
+```
+
+Para executar os testes utilizando este db via docker:
+
+```
+DB="mysql://root:codechallenge@/jobdb" go test ./... -cover
+```
+
+# Configurações
+
+Para o servidor de dados são necessárias as seguintes configurações:
+
+- Porta TCP, default PORT:8079
+- Chave de criptografia, default KEY:"01020304050607080910111213141516"
+- Database, default DB:"mysql://root:codechallenge@/jobdb"
+- Bootstrap file, default BOOTSTRAP:"jobs.txt"
+
+É possível utilizar dois tipos de backend para database, memory e mysql.
+
+Para utilizar o modo volátil utilize a string de conexão:
+
+```
+memory://
+```
+
+Para o servidor REST temos as seguintes configurações:
+
+- Porta TCP, default PORT:8080
+- Chave de criptografia, default KEY:"01020304050607080910111213141516"
+- Segredo JWT, default SECRET:"aeae42cd8f444313a4f300088713e71c"
+- Servidor de dados,  default DATA_HOST:"http://data:8079"
+
+A chave de criptografia deve ser a mesma para os dois serviços.
+
+
+# Observações
+Por não possuir o repositório com o mesmo nome dos include paths, não consegui efetuar os testes no travis, mas segue um travis.yml básico.
+
+Para informar uma host na string de conexão do mysql é necessário fornecer o protocolo também. Exemplo:
+
+```
+mysql://root:codechallenge@tcp(db:3306)/jobdb
+```
+
+Mais informações sobre esta caracteristica do driver em:
+[https://github.com/go-sql-driver/mysql](https://github.com/go-sql-driver/mysql#dsn-data-source-name)
