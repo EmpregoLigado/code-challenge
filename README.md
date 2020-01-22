@@ -2,7 +2,6 @@
 
 Através desse desafio, queremos conhecer suas habilidades de desenvolvimento e principalmente como você resolve problemas.
 
-
 ## Sem tempo para realizar o desafio?
 
 Você pode enviar o link de um pull request com uma contribuição sua para qualquer projeto Open Source ou algum projeto próprio que você acredita que demonstre o seu nível técnico e a qualidade do seu código.
@@ -19,7 +18,6 @@ partnerId|title|categoryId|ExpiresAt
 
 Baseando-se nesses dados, queremos que você crie 2 aplicações:
 
-
 1. A primeira aplicação deverá ser uma API REST para:
   - criar, ativar e listar as vagas;
   - listar a porcentagem e número de vagas ativas por categoria.
@@ -28,18 +26,16 @@ Baseando-se nesses dados, queremos que você crie 2 aplicações:
 
 Ao carregar esses dados essa aplicação deve ser responsável por criptografá-los e armazená-los.
 
-As informações deverão trafegar entre as aplicações criptografadas, consequentemente com a aplicação 1 tendo a habilidade de descriptografá-las. Fica a seu critério escolher a maneira que as aplicações irão se comunicar.
+As informações deverão trafegar entre as aplicações de maneira criptografada, consequentemente com a aplicação 1 tendo a habilidade de descriptografá-las. Fica a seu critério escolher a maneira que as aplicações irão se comunicar.
 
 Certifique-se de:
 - Que a aplicação seja `idempotente`, para isso você pode considerar que o atributo partnerID de cada vaga é sempre único durante a importação;
 - Importar somente vagas onde a data em que irá expirar for maior do que a data da importação;
 - Que todas as vagas recém criadas estejam com o status 'draft'.
 
-
 ### Endpoints
 
 Os endpoints disponíveis na aplicação estão listados abaixo. Os classificados como `Protected` devem exigir autenticação, porém o método utilizado fica a seu critério.
-
 
 | Name       | Method    | URL                  | Protected |
 | ---        | ---       | ---                  | :--:      |
@@ -48,15 +44,13 @@ Os endpoints disponíveis na aplicação estão listados abaixo. Os classificado
 | Activate   | POST      | /jobs/{:id}/activate | ✓         |
 | Percentage | GET       | /category/{:id}      | ✘         |
 
-
-
 ## Pré-requisitos
 
 O seu teste deve ter um README com os passos necessários para:
 
-- Rodar o projeto;
 - Instalar as dependências;
 - Rodar os testes automatizados.
+- Rodar o projeto;
 
 ### Tecnologia
 
@@ -70,7 +64,6 @@ Ruby, Go ou Python.
 - Docker;
 - CI;
 - Message queues.
-
 
 ## O que está sendo avaliado
 
