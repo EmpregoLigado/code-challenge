@@ -76,4 +76,4 @@ Para nos enviar seu código, você pode:
 
 - Fazer um fork desse repositório e nos mandar um pull request.
 - Nos dar acesso ao seu repositório no github, bitbucket ou gitlab. Adicione o usuário bonigauglitz.
-- Se precisar falar com a gente: engenheria@levee.com.br.
+- Se precisar falar com a gente: engenharia@levee.com.br.
