@@ -14,6 +14,7 @@ We have a data subset with some job openings separated by category (file "jobs.t
 
 
 | partnerId | title  | categoryId | ExpiresAt |
+| ---       | ---    | ---        | :--:      |
 | 1123      | Seller | 3          | 1/21/2018 | 
 
 
