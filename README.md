@@ -31,7 +31,7 @@ The information must travel between applications in an encrypted manner, consequ
 
 Make sure:
 - That the application is ʻidempotent`, for that you can consider that the partnerID attribute of each job is always unique during the import;
-- Import only vacancies where the date on which it will expire is greater than the date of import;
+- Import only jobs where the date on which it will expire is greater than the date of import;
 - That all newly created jobs have the 'draft' status.
 
 ### Endpoints
