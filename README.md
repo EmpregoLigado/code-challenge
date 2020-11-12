@@ -1,41 +1,42 @@
+
 # Backend Engineer Code Challenge - Levee
 
-Através desse desafio, queremos conhecer suas habilidades de desenvolvimento e principalmente como você resolve problemas.
+Through this challenge, we want to know your development skills and especially how you solve problems.
 
-## Sem tempo para realizar o desafio?
+## No time to take the challenge?
 
-Você pode enviar o link de um pull request com uma contribuição sua para qualquer projeto Open Source ou algum projeto próprio que você acredita que demonstre o seu nível técnico e a qualidade do seu código.
-Lembre-se que quanto mais código seu pudermos visualizar, melhor será para te avaliarmos. :)
+You can send a pull request link with your contribution to any Open Source project or any project of your own that you believe demonstrates your technical level and the quality of your code.
+Remember that the more code we view, the better it will be for us to evaluate you. :)
 
-## Sobre o desafio
+## About the challenge
 
-Temos um subset de dados com algumas vagas de emprego separadas por categoria (arquivo "jobs.txt"). Veja a estrutura abaixo:
+We have a data subset with some job openings separated by category (file "jobs.txt"). See the structure below:
 
-```
-partnerId|title|categoryId|ExpiresAt
-1123|Vendedor|3|21/1/2018
-```
+``
+partnerId | title  | categoryId | ExpiresAt
+1123      | Seller | 3          | 1/21/2018
+``
 
-Baseando-se nesses dados, queremos que você crie 2 aplicações:
+Based on this data, we want you to create 2 applications:
 
-1. A primeira aplicação deverá ser uma API REST para:
-  - criar, ativar e listar as vagas;
-  - listar a porcentagem e número de vagas ativas por categoria.
+1. The first application must be a REST API for:
+  - create, activate and list jobs;
+  - list the percentage and number of active jobs by category.
 
-2. A segunda aplicação deverá ser responsável por ler o arquivo "jobs.txt", carregar as informações referente às vagas, e servir a aplicação 1.
+2. The second application should be responsible for reading the file "jobs.txt", upload information regarding jobs, and serve application 1.
 
-Ao carregar esses dados essa aplicação deve ser responsável por criptografá-los e armazená-los.
+When loading this data, this application must be responsible for encrypting and storing it.
 
-As informações deverão trafegar entre as aplicações de maneira criptografada, consequentemente com a aplicação 1 tendo a habilidade de descriptografá-las. Fica a seu critério escolher a maneira que as aplicações irão se comunicar.
+The information must travel between applications in an encrypted manner, consequently with application 1 having the ability to decrypt them. It is up to you to choose the way the applications will communicate.
 
-Certifique-se de:
-- Que a aplicação seja `idempotente`, para isso você pode considerar que o atributo partnerID de cada vaga é sempre único durante a importação;
-- Importar somente vagas onde a data em que irá expirar for maior do que a data da importação;
-- Que todas as vagas recém criadas estejam com o status 'draft'.
+Make sure:
+- That the application is ʻidempotent`, for that you can consider that the partnerID attribute of each job is always unique during the import;
+- Import only vacancies where the date on which it will expire is greater than the date of import;
+- That all newly created jobs have the 'draft' status.
 
 ### Endpoints
 
-Os endpoints disponíveis na aplicação estão listados abaixo. Os classificados como `Protected` devem exigir autenticação, porém o método utilizado fica a seu critério.
+The endpoints available in the application are listed below. Those classified as `Protected` must require authentication, however the method used is at their discretion.
 
 | Name       | Method    | URL                  | Protected |
 | ---        | ---       | ---                  | :--:      |
@@ -44,36 +45,36 @@ Os endpoints disponíveis na aplicação estão listados abaixo. Os classificado
 | Activate   | POST      | /jobs/{:id}/activate | ✓         |
 | Percentage | GET       | /category/{:id}      | ✘         |
 
-## Pré-requisitos
+## Prerequisites
 
-O seu teste deve ter um README com os passos necessários para:
+Your test must have a README with the necessary steps to:
 
-- Instalar as dependências;
-- Rodar os testes automatizados.
-- Rodar o projeto;
+- Install the dependencies;
+- Run automated tests.
+- Run the project;
 
-### Tecnologia
+### Technology
 
-Ruby, Go ou Python.
+Ruby, Go or Python.
 
-### Gostamos de:
+### We like:
 
-- Commits estruturados;
-- Documentação;
-- Testes;
+- Structured commits;
+- Documentation;
+- Tests;
 - Docker;
 - CI;
 - Message queues.
 
-## O que está sendo avaliado
+## What is being evaluated
 
-Sua capacidade de compreender um problema, desenhar uma solução e aplicá-la.
-Queremos ver como você resolve o problema proposto e suas habilidades com as tecnologias propostas.
+Your ability to understand a problem, design a solution and apply it.
+We want to see how you solve the proposed problem and your skills with the proposed technologies.
 
-## Submissão
+## Submission
 
-Para nos enviar seu código, você pode:
+To send us your code, you can:
 
-- Fazer um fork desse repositório e nos mandar um pull request.
-- Nos dar acesso ao seu repositório no github, bitbucket ou gitlab. Adicione o usuário bonigauglitz.
-- Se precisar falar com a gente: engenharia@levee.com.br.
+- Fork this repository and send us a pull request.
+- Give us access to your repository on github, bitbucket or gitlab. Add the user bonigauglitz.
+- If you need to talk to us: engineering@levee.com
