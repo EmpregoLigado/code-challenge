@@ -12,10 +12,10 @@ Remember that the more code we view, the better it will be for us to evaluate yo
 
 We have a data subset with some job openings separated by category (file "jobs.txt"). See the structure below:
 
-``
-partnerId | title  | categoryId | ExpiresAt
-1123      | Seller | 3          | 1/21/2018
-``
+
+| partnerId | title  | categoryId | ExpiresAt |
+| 1123      | Seller | 3          | 1/21/2018 | 
+
 
 Based on this data, we want you to create 2 applications:
 
@@ -36,7 +36,7 @@ Make sure:
 
 ### Endpoints
 
-The endpoints available in the application are listed below. Those classified as `Protected` must require authentication, however the method used is at their discretion.
+The endpoints available in the application are listed below. Those classified as `Protected` must require authentication, however the method used is at your discretion.
 
 | Name       | Method    | URL                  | Protected |
 | ---        | ---       | ---                  | :--:      |
